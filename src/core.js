@@ -1,5 +1,7 @@
 import {fromJS} from 'immutable'
 
+export const INITIAL_STATE = fromJS({})
+
 export function setEntries(state, entries) {
   return state.set('entries', fromJS(entries))
 }
