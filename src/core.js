@@ -1,46 +1,47 @@
-import {fromJS} from 'immutable'
+import fromJS from 'immutable';
 
-export const INITIAL_STATE = fromJS({})
+export const INITIAL_STATE = fromJS({});
 
 export function setEntries(state, entries) {
-  return state.set('entries', fromJS(entries))
+  return state.set('entries', fromJS(entries));
 }
 
-function getWinner(vote) {
-  if (!vote) {
-    return []
+function getWinner(voteInfo) {
+  if (!voteInfo) {
+    return [];
   }
-  const [a, b] = vote.get('pair')
-  const aVotes = vote.getIn(['tally', a], 0)
-  const bVotes = vote.getIn(['tally', b], 0)
+
+  const [a, b] = voteInfo.get('pair');
+  const aVotes = voteInfo.getIn(['tally', a], 0);
+  const bVotes = voteInfo.getIn(['tally', b], 0);
 
   if (aVotes > bVotes) {
-    return [a]
+    return [a];
   } else if (aVotes < bVotes) {
-    return [b]
-  } else {
-    return [a, b]
+    return [b];
   }
+
+  return [a, b];
 }
 
 export function next(state) {
   const entries = state.get('entries')
-                 .concat(getWinner(state.get('vote')))
+                 .concat(getWinner(state.get('vote')));
 
-  if (entries.size == 1) {
+  if (entries.size === 1) {
     return state.remove('entries')
                 .remove('vote')
-                .set('winner', entries.first())
+                .set('winner', entries.first());
   }
 
   return state.merge({
     vote: {
-      pair: entries.take(2)
+      pair: entries.take(2),
     },
-    entries: entries.skip(2)
-  })
+    entries: entries.skip(2),
+  });
 }
 
 export function vote(state, entry) {
-  return state.updateIn(['vote', 'tally', entry], 0, tally => tally + 1)
+  return state.updateIn(['vote', 'tally', entry], 0, tally => tally + 1);
 }
