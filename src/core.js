@@ -1,4 +1,4 @@
-import fromJS from 'immutable';
+import { fromJS } from 'immutable';
 
 export const INITIAL_STATE = fromJS({});
 
@@ -6,14 +6,14 @@ export function setEntries(state, entries) {
   return state.set('entries', fromJS(entries));
 }
 
-function getWinner(voteInfo) {
-  if (!voteInfo) {
+function getWinner(voteState) {
+  if (!voteState) {
     return [];
   }
 
-  const [a, b] = voteInfo.get('pair');
-  const aVotes = voteInfo.getIn(['tally', a], 0);
-  const bVotes = voteInfo.getIn(['tally', b], 0);
+  const [a, b] = voteState.get('pair');
+  const aVotes = voteState.getIn(['tally', a], 0);
+  const bVotes = voteState.getIn(['tally', b], 0);
 
   if (aVotes > bVotes) {
     return [a];
@@ -42,6 +42,6 @@ export function next(state) {
   });
 }
 
-export function vote(state, entry) {
-  return state.updateIn(['vote', 'tally', entry], 0, tally => tally + 1);
+export function vote(voteState, entry) {
+  return voteState.updateIn(['tally', entry], 0, tally => tally + 1);
 }

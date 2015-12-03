@@ -1,5 +1,5 @@
-import expect from 'chai';
-import fromJS from 'immutable';
+import { expect } from 'chai';
+import { fromJS } from 'immutable';
 
 import {setEntries, next, vote} from '../src/core';
 
@@ -95,45 +95,33 @@ describe('application logic', () => {
   describe('vote', () => {
     it('creates a tally for voted entry', () => {
       const state = fromJS({
-        entries: [],
-        vote: {
-          pair: ['a', 'b'],
-        },
+        pair: ['a', 'b'],
       });
       const nextState = vote(state, 'a');
 
       expect(nextState).to.equal(fromJS({
-        entries: [],
-        vote: {
-          pair: ['a', 'b'],
-          tally: {
-            a: 1,
-          },
+        pair: ['a', 'b'],
+        tally: {
+          a: 1,
         },
       }));
     });
 
     it('adds to existing tally for the voted entry', () => {
       const state = fromJS({
-        entries: [],
-        vote: {
-          pair: ['a', 'b'],
-          tally: {
-            a: 1,
-            b: 3,
-          },
+        pair: ['a', 'b'],
+        tally: {
+          a: 1,
+          b: 3,
         },
       });
       const nextState = vote(state, 'a');
 
       expect(nextState).to.equal(fromJS({
-        entries: [],
-        vote: {
-          pair: ['a', 'b'],
-          tally: {
-            a: 2,
-            b: 3,
-          },
+        pair: ['a', 'b'],
+        tally: {
+          a: 2,
+          b: 3,
         },
       }));
     });
